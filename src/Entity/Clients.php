@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\ClientsRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ClientsRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=ClientsRepository::class)
+ * @UniqueEntity(fields={"name"}, message="There is already a client with this name")
  */
 class Clients
 {
@@ -21,6 +24,7 @@ class Clients
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $Name;
 
