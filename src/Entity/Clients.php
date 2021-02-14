@@ -11,7 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=ClientsRepository::class)
- * @UniqueEntity(fields={"name"}, message="There is already a client with this name")
+ * @UniqueEntity(fields={"Name"}, message="There is already a client with this name")
  */
 class Clients
 {
