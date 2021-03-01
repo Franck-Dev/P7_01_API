@@ -8,12 +8,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=ClientsRepository::class)
  * @UniqueEntity(fields={"Name"}, message="There is already a client with this name")
  */
-class Clients
+class Clients implements UserInterface
 {
     /**
      * @ORM\Id
@@ -26,7 +27,7 @@ class Clients
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      */
-    private $Name;
+    private $username;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -38,6 +39,11 @@ class Clients
      */
     private $users;
 
+    /**
+     * @ORM\OneToOne(targetEntity=ApiToken::class, mappedBy="client", cascade={"persist", "remove"})
+     */
+    private $apiToken;
+    
     public function __construct()
     {
         $this->users = new ArrayCollection();
@@ -48,12 +54,12 @@ class Clients
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getUsername(): ?string
     {
         return $this->Name;
     }
 
-    public function setName(string $Name): self
+    public function setUsername(string $Name): self
     {
         $this->Name = $Name;
 
@@ -100,5 +106,43 @@ class Clients
         }
 
         return $this;
+    }
+
+    public function getApiToken(): ?ApiToken
+    {
+        return $this->apiToken;
+    }
+
+    public function setApiToken(ApiToken $apiToken): self
+    {
+        // set the owning side of the relation if necessary
+        if ($apiToken->getClient() !== $this) {
+            $apiToken->setClient($this);
+        }
+
+        $this->apiToken = $apiToken;
+
+        return $this;
+    }
+
+    public function getSalt()
+    {
+        // you *may* need a real salt depending on your encoder
+        // see section on salt below
+        return null;
+    }
+
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    public function getRoles()
+    {
+        return array('ROLE_USER');
+    }
+
+    public function eraseCredentials()
+    {
     }
 }

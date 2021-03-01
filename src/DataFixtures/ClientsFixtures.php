@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Clients;
+use App\Entity\ApiToken;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 
@@ -15,12 +16,14 @@ class ClientsFixtures extends Fixture
 
         for($i=0;$i<count($Clients);$i++){
             $Client= new Clients();
-                $Client  ->setName($Clients[$i])
-                        ->setDescription($Description[$i]);
+            $Client  ->setUsername($Clients[$i])
+                    ->setDescription($Description[$i]);
+            $apiToken1 = new ApiToken($Client);
+            $manager->persist($apiToken1);
 
-                $manager->persist($Client);
-                $manager->flush();
-                $this->addReference($Clients[$i],$Client);
+            // $manager->persist($Client);
+            $manager->flush();
+            $this->addReference($Clients[$i],$Client);
         }
     }
 }

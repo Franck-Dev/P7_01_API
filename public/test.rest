@@ -1,0 +1,9 @@
+POST http://127.0.0.1:8001/api/register HTTP/1.1
+content-type: application/json
+
+{
+  "username": "Toto",
+  "email": "AZERT@ZERTY.COM",
+  "password": "toto",
+  "Client": {"id":1}
+}
