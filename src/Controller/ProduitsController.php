@@ -9,8 +9,14 @@ use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
+/**
+ * ProduitsController.
+ * @Route("/api",name="api_")
+ */
 
 class ProduitsController extends AbstractFOSRestController
 {
@@ -43,13 +49,12 @@ class ProduitsController extends AbstractFOSRestController
      */
     public function showAction(Produits $produit)
     {
-
         return $produit;
     }
 
     /**
      * @Rest\Post(
-     *    path = "/produits",
+     *    path = "/produit",
      *    name = "app_produit_create"
      * )
      * @Rest\View(StatusCode = 201)
@@ -57,7 +62,6 @@ class ProduitsController extends AbstractFOSRestController
      */
     public function createAction(Produits $produit, ConstraintViolationList $violations)
     {
-
         if (count($violations)) {
             return $this->view($violations, Response::HTTP_BAD_REQUEST);
         }
