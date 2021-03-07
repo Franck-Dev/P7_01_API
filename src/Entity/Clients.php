@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=ClientsRepository::class)
- * @UniqueEntity(fields={"Name"}, message="There is already a client with this name")
+ * @UniqueEntity(fields={"username"}, message="There is already a client with this name")
  */
 class Clients implements UserInterface
 {
@@ -56,12 +56,12 @@ class Clients implements UserInterface
 
     public function getUsername(): ?string
     {
-        return $this->Name;
+        return $this->username;
     }
 
-    public function setUsername(string $Name): self
+    public function setUsername(string $username): self
     {
-        $this->Name = $Name;
+        $this->username = $username;
 
         return $this;
     }
