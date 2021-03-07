@@ -8,15 +8,16 @@ security:
         # users_provider:
         #     entity:
         #         class: App\Entity\Users
-        #         property: apiToken
+        #         property: email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            anonymous: lazy
+            pattern: ^/api
+            stateless: true
+            anonymous: true
             provider: users_in_memory
-            logout: ~
 
             guard:
                 authenticators:
@@ -33,5 +34,5 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         - { path: ^/api/admin, roles: ROLE_ADMIN }
-        - { path: ^/api/users, roles: ROLE_CLIENT }
-        - { path: ^/api/register, roles: ROLE_USER }
+        - { path: ^/api/client, roles: ROLE_CLIENT }
+        - { path: ^/api, roles: ROLE_USER }

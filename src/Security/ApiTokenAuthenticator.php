@@ -11,6 +11,7 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Validator\Constraints\IsNull;
 
 class ApiTokenAuthenticator extends AbstractGuardAuthenticator
 {
@@ -44,7 +45,11 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator
                     'Invalid API Token'
                 );
         }
-        return $token->getClient();
+        if (!$token->getClient()) {
+            return $token->getUserClient();
+        } else {
+            return $token->getClient();
+        }  
     }
 
     public function checkCredentials($credentials, UserInterface $client)

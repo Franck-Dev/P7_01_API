@@ -4,13 +4,14 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\UsersRepository;
+use JMS\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UsersRepository::class)
- * @UniqueEntity(fields={"email"},message ="Cette adresse est deja utilise")
+ * @UniqueEntity(fields={"email"},message ="Cette adresse est deja utilise")(groups={"Create"})
  */
 class Users implements UserInterface
 {
@@ -18,12 +19,14 @@ class Users implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("Show")
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180)
      * @Assert\NotBlank()
+     * @Groups("Show")
      */
     private $username;
 
@@ -49,6 +52,12 @@ class Users implements UserInterface
      * @ORM\Column(type="array")
      */
     private $roles = [];
+
+    /**
+     * @ORM\OneToOne(targetEntity=ApiToken::class, mappedBy="userClient", cascade={"persist", "remove"})
+     * @Groups("Show")
+     */
+    private $apiToken;
 
     public function getId(): ?int
     {

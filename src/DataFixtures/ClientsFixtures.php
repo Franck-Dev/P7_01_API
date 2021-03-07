@@ -16,8 +16,8 @@ class ClientsFixtures extends Fixture
 
         for($i=0;$i<count($Clients);$i++){
             $Client= new Clients();
-            $Client  ->setUsername($Clients[$i])
-                    ->setDescription($Description[$i]);
+            $Client->setUsername($Clients[$i]);
+            $Client->setDescription($Description[$i]);
             $apiToken1 = new ApiToken($Client);
             $manager->persist($apiToken1);
 

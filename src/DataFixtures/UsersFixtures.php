@@ -2,8 +2,9 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Clients;
 use App\Entity\Users;
+use App\Entity\Clients;
+use App\Entity\ApiToken;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -24,7 +25,10 @@ class UsersFixtures extends Fixture
             $client= new Clients;
             $client=$this->getReference($Clients[random_int(0,2)]);
             $user = new Users();
-            $user->setEmail(sprintf('spacebar%d@example.com', $i));
+            $apiToken1 = new ApiToken(null,$user);
+            $manager->persist($apiToken1);
+
+            $user->setEmail(sprintf('monApi%d@example.com', $i));
             $user->setUserName('Utilisateur'.$i);
             $user->setPassword($this->passwordEncoder->encodePassword(
                 $user,
