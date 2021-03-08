@@ -28,14 +28,27 @@ class ProduitsController extends AbstractFOSRestController
      * @Rest\QueryParam(
      *     name="order",
      *     requirements="asc|desc",
+     *     nullable=true,
      *     default="asc",
      *     description="Sort order (asc or desc)"
      * )
+     * @Rest\QueryParam(
+     *     name="limit",
+     *     requirements="\d+",
+     *     default="15",
+     *     description="Début de pagination"
+     * )
+     * @Rest\QueryParam(
+     *     name="offset",
+     *     requirements="\d+",
+     *     default="1",
+     *     description="Fin de pagination"
+     * )
      * @Rest\View
      */
-    public function listProduits(ProduitsRepository $repo, $order)
-    {
-        $produits=$repo->findAll();
+    public function listProduits(ProduitsRepository $repo, $order, $limit, $offset)
+    {        
+        $produits=$repo->findBy([],['Name'=> $order],$limit,$offset);
         return $produits;
     }
     
