@@ -3,7 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Clients;
+use App\Entity\ApiToken;
+use App\Repository\UsersRepository;
 use App\Repository\ClientsRepository;
+use App\Security\ApiTokenAuthenticator;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -23,12 +27,6 @@ class ClientsController extends AbstractFOSRestController
      * @Rest\Get(
      *     path = "/admin/clients/list",
      *     name = "app_clients_list"
-     * )
-     * @Rest\QueryParam(
-     *     name="order",
-     *     requirements="asc|desc",
-     *     default="asc",
-     *     description="Sort order (asc or desc)"
      * )
      * @Rest\View
      */
@@ -78,11 +76,34 @@ class ClientsController extends AbstractFOSRestController
      *     path = "/client/Users/List",
      *     name = "app_users_list"
      * )
-     * @Rest\View
+     * @Rest\QueryParam(
+     *     name="order",
+     *     requirements="asc|desc",
+     *     default="asc",
+     *     description="Sort order (asc or desc)"
+     * )
+     * @Rest\QueryParam(
+     *     name="limit",
+     *     requirements="\d+",
+     *     default="15",
+     *     description="Fin liste utilisateurs"
+     * )
+     * @Rest\QueryParam(
+     *     name="offset",
+     *     requirements="\d+",
+     *     default="1",
+     *     description="Début liste utilisateurs"
+     * )
+     * @Rest\View(StatusCode = 200,serializerGroups={"Show"})
      */
-    public function getUsersClient(Clients $client)
+    public function getUsersClient(ApiTokenAuthenticator $Auth, Request $request, UsersRepository $repo, $order, $limit, $offset)
     {
+        // On doit trouver le token de client de cet utilisateur
+        $token=$Auth->getCredentials($request);
+        $idToken=$this->getDoctrine()->getRepository(ApiToken::class)->findOneBy(['token' => $token]);
 
-        return $client;
+        $clients=$repo->findBy(['Client'=> $idToken->getUserClient()->getClient()],['username'=> $order],$limit,$offset);
+
+        return $clients;
     }
 }
