@@ -72,7 +72,7 @@ class ProduitsController extends AbstractFOSRestController
 
     /**
      * @Rest\Post(
-     *    path = "/produit",
+     *    path = "/admin/produit",
      *    name = "app_produit_create"
      * )
      * @Rest\View(StatusCode = 201)

@@ -34,12 +34,6 @@ class SecurityController extends AbstractFOSRestController
      * @ParamConverter("user", converter="fos_rest.request_body")
      * 
      * @OA\Tag(name="Utilisateurs")
-     * @OA\Parameter(
-     *     name="Token Client",
-     *     required=true,
-     *     in="header",
-     *     @OA\Schema(type="string") 
-     * )
      * 
      */
     public function register(Request $request, Users $user, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, ConstraintViolationList $violations,ApiTokenAuthenticator $Auth )
