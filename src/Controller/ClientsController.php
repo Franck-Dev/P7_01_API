@@ -15,6 +15,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use OpenApi\Annotations\Tag as OA;
 
 /**
  * ClientsController.
@@ -29,6 +30,8 @@ class ClientsController extends AbstractFOSRestController
      *     name = "app_clients_list"
      * )
      * @Rest\View
+     * 
+     * @OA(name="Admin")
      */
     public function listClients(ClientsRepository $repo, $order)
     {
@@ -43,6 +46,8 @@ class ClientsController extends AbstractFOSRestController
      * )
      * @Rest\View(StatusCode = 201)
      * @ParamConverter("client", converter="fos_rest.request_body")
+     * 
+     * @OA(name="Admin")
      */
     public function createAction(Clients $client, ConstraintViolationList $violations)
     {
@@ -64,6 +69,8 @@ class ClientsController extends AbstractFOSRestController
      *     requirements = {"id"="\d+"}
      * )
      * @Rest\View
+     * 
+     * @OA(name="Client")
      */
     public function showAction(Clients $client)
     {
@@ -95,6 +102,8 @@ class ClientsController extends AbstractFOSRestController
      *     description="Début liste utilisateurs"
      * )
      * @Rest\View(StatusCode = 200,serializerGroups={"Show"})
+     * 
+     * @OA(name="Client")
      */
     public function getUsersClient(ApiTokenAuthenticator $Auth, Request $request, UsersRepository $repo, $order, $limit, $offset)
     {
