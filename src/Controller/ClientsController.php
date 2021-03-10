@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Users;
 use App\Entity\Clients;
 use App\Entity\ApiToken;
+use OpenApi\Annotations\Tag as OA;
 use App\Repository\UsersRepository;
 use App\Repository\ClientsRepository;
 use App\Security\ApiTokenAuthenticator;
@@ -29,6 +31,8 @@ class ClientsController extends AbstractFOSRestController
      *     name = "app_clients_list"
      * )
      * @Rest\View
+     * 
+     * @OA(name="Admin")
      */
     public function listClients(ClientsRepository $repo, $order)
     {
@@ -43,6 +47,8 @@ class ClientsController extends AbstractFOSRestController
      * )
      * @Rest\View(StatusCode = 201)
      * @ParamConverter("client", converter="fos_rest.request_body")
+     * 
+     * @OA(name="Admin")
      */
     public function createAction(Clients $client, ConstraintViolationList $violations)
     {
@@ -64,6 +70,8 @@ class ClientsController extends AbstractFOSRestController
      *     requirements = {"id"="\d+"}
      * )
      * @Rest\View
+     * 
+     * @OA(name="Client")
      */
     public function showAction(Clients $client)
     {
@@ -95,15 +103,36 @@ class ClientsController extends AbstractFOSRestController
      *     description="Début liste utilisateurs"
      * )
      * @Rest\View(StatusCode = 200,serializerGroups={"Show"})
+     * 
+     * @OA(name="Client")
      */
     public function getUsersClient(ApiTokenAuthenticator $Auth, Request $request, UsersRepository $repo, $order, $limit, $offset)
     {
-        // On doit trouver le token de client de cet utilisateur
+        // On doit trouver le token du client de cet utilisateur
         $token=$Auth->getCredentials($request);
         $idToken=$this->getDoctrine()->getRepository(ApiToken::class)->findOneBy(['token' => $token]);
 
         $clients=$repo->findBy(['Client'=> $idToken->getUserClient()->getClient()],['username'=> $order],$limit,$offset);
 
         return $clients;
+    }
+
+     /**
+     * @Rest\Delete(
+     *     path = "/client/user/{id}",
+     *     name = "app_client_delete_user",
+     *     requirements = {"id"="\d+"}
+     * )
+     * @Rest\View(StatusCode = 200)
+     * 
+     * @OA(name="Client")
+     */
+    public function deleteUser(Users $user)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $em->remove($user);
+        $em->flush();
+        return $this->view(null, Response::HTTP_OK, []);
     }
 }

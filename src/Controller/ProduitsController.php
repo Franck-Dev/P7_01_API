@@ -12,6 +12,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use OpenApi\Annotations\Tag as OA;
 
 /**
  * ProduitsController.
@@ -45,6 +46,8 @@ class ProduitsController extends AbstractFOSRestController
      *     description="Fin de pagination"
      * )
      * @Rest\View
+     * 
+     * @OA(name="Utilisateurs")
      */
     public function listProduits(ProduitsRepository $repo, $order, $limit, $offset)
     {        
@@ -59,6 +62,8 @@ class ProduitsController extends AbstractFOSRestController
      *     requirements = {"id"="\d+"}
      * )
      * @Rest\View
+     * 
+     * @OA(name="Utilisateurs")
      */
     public function showAction(Produits $produit)
     {
@@ -67,11 +72,13 @@ class ProduitsController extends AbstractFOSRestController
 
     /**
      * @Rest\Post(
-     *    path = "/produit",
+     *    path = "/admin/produit",
      *    name = "app_produit_create"
      * )
      * @Rest\View(StatusCode = 201)
      * @ParamConverter("produit", converter="fos_rest.request_body")
+     * 
+     * @OA(name="Admin")
      */
     public function createAction(Produits $produit, ConstraintViolationList $violations)
     {

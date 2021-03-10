@@ -16,6 +16,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use OpenApi\Annotations as OA;
 
 /**
  * @Route("/api")
@@ -25,23 +26,15 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 class SecurityController extends AbstractFOSRestController
 {
     /**
-     * @Route("/security", name="app_security")
-     */
-    public function index(): Response
-    {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/SecurityController.php',
-        ]);
-    }
-
-    /**
      * @Rest\Post(
      *    path = "/register",
      *    name = "app_user_create"
      * )
      * @Rest\View(StatusCode = 201)
      * @ParamConverter("user", converter="fos_rest.request_body")
+     * 
+     * @OA\Tag(name="Utilisateurs")
+     * 
      */
     public function register(Request $request, Users $user, UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $entityManager, ConstraintViolationList $violations,ApiTokenAuthenticator $Auth )
     {
@@ -79,6 +72,8 @@ class SecurityController extends AbstractFOSRestController
      *         "validator"={ "groups"="Create" }
      *     }
      * )
+     * 
+     * @OA\Tag(name="Utilisateurs")
      */
     public function login(Users $user, UserPasswordEncoderInterface $passwordEncoder, ConstraintViolationList $violations )
     {

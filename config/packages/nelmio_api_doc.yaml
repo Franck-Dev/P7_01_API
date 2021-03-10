@@ -1,0 +1,70 @@
+nelmio_api_doc:
+  areas:
+    path_patterns:
+      - ^/api(?!/doc$)
+  documentation:
+    info:
+      title: API Bilemo
+      description: Catalogue de téléphones et liste Clients/utilisateurs
+      version: 1.0.0
+    paths:
+      /api/login:
+        post:
+          requestBody:
+            description: Information sur l'utilisateur
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/User"
+          responses:
+            "202":
+              description: Le status 202 veut dire que la requette a bien fonctionnée
+            "400":
+              description: Erreur de mot de passe
+            "402":
+              description: Token d'authentification pas reconnu
+            "500":
+              description: Identifiant inconnu dans la base
+      /api/register:
+        post:
+          requestBody:
+            description: Information sur l'utilisateur
+            content:
+              application/json:
+                schema:
+                  $ref: "#/components/schemas/NewUser"
+          responses:
+            "201":
+              description: Utilisateur enregistrée
+            "400":
+              description: Erreur sur les données
+    components:
+            securitySchemes:
+                Bearer:
+                    type: http
+                    scheme: bearer
+                    description: Clé token de l'utilisateur
+            schemas:
+              User:
+                required:
+                  - email
+                  - password
+                properties:
+                  email:
+                    type: string
+                  password:
+                    type: string
+              NewUser:
+                required:
+                  - email
+                  - password
+                  - username
+                properties:
+                  email:
+                    type: string
+                  password:
+                    type: string
+                  username:
+                    type: string    
+    security:
+            - Bearer: []
