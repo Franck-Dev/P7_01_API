@@ -23,8 +23,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *     href = @Hateoas\Route(
  *          "api_app_produits_list",
  *          absolute = true
- *      ),
- *      exclusion = @Hateoas\Exclusion(groups={"list"})
+ *      )
  * )
  */
 class Produits
@@ -40,14 +39,14 @@ class Produits
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
-     * @Groups({"list", "detail"})
+     * @Groups({"list", "detail", "create"})
      */
     private $Name;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
-     * @Groups({"detail"})
+     * @Groups({"detail", "create"})
      */
     private $Description;
 

@@ -8,10 +8,26 @@ use JMS\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Hateoas\Configuration\Annotation as Hateoas;
 
 /**
  * @ORM\Entity(repositoryClass=UsersRepository::class)
  * @UniqueEntity(fields={"email"},message ="Cette adresse est deja utilise")(groups={"Create"})
+ * 
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(name="api_app_user_show",parameters={ "id" = "expr(object.getId())" },
+ *          absolute = true),
+ *      exclusion = @Hateoas\Exclusion(groups={"client"})
+ * )
+ * @Hateoas\Relation(
+ *     "list",
+ *     href = @Hateoas\Route(
+ *          "api_app_users_list",
+ *          absolute = true
+ *      ),
+ *      exclusion = @Hateoas\Exclusion(groups={"client"})
+ * )
  */
 class Users implements UserInterface
 {
@@ -19,43 +35,47 @@ class Users implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups("Show")
+     * @Groups({"Show","detail"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=180)
      * @Assert\NotBlank()
-     * @Groups("Show")
+     * @Groups({"Show","detail"})
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=180)
      * @Assert\NotBlank()
+     * @Groups("detail")
      */
     private $email;
 
     /**
      * @ORM\ManyToOne(targetEntity=Clients::class, inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
+     * @Groups("client")
      */
     private $Client;
 
     /**
      * @ORM\Column(type="string", length=180)
      * @Assert\NotBlank()
+     * @Groups("detail")
      */
     private $password;
 
     /**
      * @ORM\Column(type="array")
+     * @Groups("detail")
      */
     private $roles = [];
 
     /**
      * @ORM\OneToOne(targetEntity=ApiToken::class, mappedBy="userClient", cascade={"persist", "remove"})
-     * @Groups("Show")
+     * @Groups({"Show","detail"})
      */
     private $apiToken;
 
