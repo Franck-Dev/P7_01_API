@@ -61,7 +61,7 @@ class ProduitsController extends AbstractFOSRestController
      *     name = "app_produit_show",
      *     requirements = {"id"="\d+"}
      * )
-     * @Rest\View
+     * @Rest\View(serializerGroups={"detail"})
      * 
      * @OA(name="Utilisateurs")
      */

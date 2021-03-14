@@ -2,17 +2,38 @@
 
 namespace App\Entity;
 
+use Hateoas\Configuration\Annotation as Hateoas;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ClientsRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=ClientsRepository::class)
  * @UniqueEntity(fields={"username"}, message="There is already a client with this name")
+ * 
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(name="api_app_client_show",parameters={ "id" = "expr(object.getId())" },
+ *          absolute = true)
+ * )
+ * @Hateoas\Relation(
+ *     "list",
+ *     href = @Hateoas\Route(
+ *          "api_app_users_list",
+ *          absolute = true
+ *      )
+ * )
+ * @Hateoas\Relation(
+ *     "listClients",
+ *     href = @Hateoas\Route(
+ *          "api_app_client_list",
+ *          absolute = true
+ *      )
+ * )
  */
 class Clients implements UserInterface
 {
