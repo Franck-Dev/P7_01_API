@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use OpenApi\Annotations as OA;
 
 /**
- * @Route("/api")
+ * @Route("/api",name="api_")
  */
 
 //class SecurityController extends AbstractController
@@ -94,5 +94,20 @@ class SecurityController extends AbstractFOSRestController
             return $this->view('Identifiant inconnu dans la base', Response::HTTP_NOT_FOUND);
         }
         
+    }
+
+    /**
+     * @Rest\Get(
+     *     path = "/user/{id}",
+     *     name = "app_user_show",
+     *     requirements = {"id"="\d+"}
+     * )
+     * @Rest\View(serializerGroups={"detail"})
+     * 
+     * @OA\Tag(name="Utilisateurs")
+     */
+    public function showAction(Users $user)
+    {
+        return $user;
     }
 }

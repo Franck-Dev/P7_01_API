@@ -30,11 +30,11 @@ class ClientsController extends AbstractFOSRestController
      *     path = "/admin/clients/list",
      *     name = "app_clients_list"
      * )
-     * @Rest\View
+     * @Rest\View(serializerGroups={"list"})
      * 
      * @OA(name="Admin")
      */
-    public function listClients(ClientsRepository $repo, $order)
+    public function listClients(ClientsRepository $repo)
     {
         $clients=$repo->findAll();
         return $clients;
@@ -57,10 +57,13 @@ class ClientsController extends AbstractFOSRestController
         }
         
         $em = $this->getDoctrine()->getManager();
-
+        //Création du token API du client
+        $apiToken1 = new ApiToken($client,null);
+        $em->persist($apiToken1);
+        
         $em->persist($client);
         $em->flush();
-        return $this->view($client, Response::HTTP_CREATED, ['Location' => $this->generateUrl('app_client_show', ['id' => $client->getId(), UrlGeneratorInterface::ABSOLUTE_URL])]);
+        return $this->view($client, Response::HTTP_CREATED, ['Location' => $this->generateUrl('api_app_client_show', ['id' => $client->getId(), UrlGeneratorInterface::ABSOLUTE_URL])]);
     }
 
      /**
@@ -69,13 +72,12 @@ class ClientsController extends AbstractFOSRestController
      *     name = "app_client_show",
      *     requirements = {"id"="\d+"}
      * )
-     * @Rest\View
+     * @Rest\View(serializerGroups={"detail"})
      * 
      * @OA(name="Client")
      */
     public function showAction(Clients $client)
     {
-
         return $client;
     }
 
@@ -102,7 +104,7 @@ class ClientsController extends AbstractFOSRestController
      *     default="1",
      *     description="Début liste utilisateurs"
      * )
-     * @Rest\View(StatusCode = 200,serializerGroups={"Show"})
+     * @Rest\View(StatusCode = 200,serializerGroups={"Show","client"})
      * 
      * @OA(name="Client")
      */
@@ -112,9 +114,8 @@ class ClientsController extends AbstractFOSRestController
         $token=$Auth->getCredentials($request);
         $idToken=$this->getDoctrine()->getRepository(ApiToken::class)->findOneBy(['token' => $token]);
 
-        $clients=$repo->findBy(['Client'=> $idToken->getUserClient()->getClient()],['username'=> $order],$limit,$offset);
-
-        return $clients;
+        $users=$repo->findBy(['Client'=> $idToken->getUserClient()->getClient()],['username'=> $order],$limit,$offset);
+        return $users;
     }
 
      /**

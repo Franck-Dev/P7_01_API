@@ -4,15 +4,31 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\ClientsRepository;
+use JMS\Serializer\Annotation\Groups;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Hateoas\Configuration\Annotation as Hateoas;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=ClientsRepository::class)
  * @UniqueEntity(fields={"username"}, message="There is already a client with this name")
+ * 
+ * @Hateoas\Relation(
+ *      "self",
+ *      href = @Hateoas\Route(name="api_app_client_show",parameters={ "id" = "expr(object.getId())" },
+ *          absolute = true),
+ *      exclusion = @Hateoas\Exclusion(groups={"listUsers"})
+ * )
+ * @Hateoas\Relation(
+ *     "listClients",
+ *     href = @Hateoas\Route(
+ *          "api_app_clients_list",
+ *          absolute = true
+ *      )
+ * )
  */
 class Clients implements UserInterface
 {
@@ -20,27 +36,32 @@ class Clients implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"list", "detail"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Groups({"list", "detail"})
      */
     private $username;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("detail")
      */
     private $Description;
 
     /**
      * @ORM\OneToMany(targetEntity=Users::class, mappedBy="Client")
+     * @Groups("listUsers")
      */
     private $users;
 
     /**
      * @ORM\OneToOne(targetEntity=ApiToken::class, mappedBy="client", cascade={"persist", "remove"})
+     * @Groups({"detail","list"})
      */
     private $apiToken;
     
@@ -139,7 +160,7 @@ class Clients implements UserInterface
 
     public function getRoles()
     {
-        return array('ROLE_USER');
+        return array('ROLE_CLIENT');
     }
 
     public function eraseCredentials()

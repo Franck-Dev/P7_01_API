@@ -61,7 +61,7 @@ class ProduitsController extends AbstractFOSRestController
      *     name = "app_produit_show",
      *     requirements = {"id"="\d+"}
      * )
-     * @Rest\View
+     * @Rest\View(serializerGroups={"detail"})
      * 
      * @OA(name="Utilisateurs")
      */
@@ -75,7 +75,7 @@ class ProduitsController extends AbstractFOSRestController
      *    path = "/admin/produit",
      *    name = "app_produit_create"
      * )
-     * @Rest\View(StatusCode = 201)
+     * @Rest\View(StatusCode = 201, serializerGroups={"create"})
      * @ParamConverter("produit", converter="fos_rest.request_body")
      * 
      * @OA(name="Admin")
@@ -90,6 +90,6 @@ class ProduitsController extends AbstractFOSRestController
 
         $em->persist($produit);
         $em->flush();
-        return $this->view($produit, Response::HTTP_CREATED, ['Location' => $this->generateUrl('app_produit_show', ['id' => $produit->getId(), UrlGeneratorInterface::ABSOLUTE_URL])]);
+        return $this->view($produit, Response::HTTP_CREATED, ['Location' => $this->generateUrl('api_app_produit_show', ['id' => $produit->getId(), UrlGeneratorInterface::ABSOLUTE_URL])]);
     }
 }
