@@ -113,7 +113,7 @@ class ClientsController extends AbstractFOSRestController
         $idToken=$this->getDoctrine()->getRepository(ApiToken::class)->findOneBy(['token' => $token]);
 
         $clients=$repo->findBy(['Client'=> $idToken->getUserClient()->getClient()],['username'=> $order],$limit,$offset);
-
+        
         return $clients;
     }
 
