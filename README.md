@@ -29,8 +29,27 @@ Projet 7: Creation d'une API REST sous symfony
 ```
     php bin/console doctrine:migrations:migrate
 ```
-6. (Optionnel) Installer les fixtures pour avoir une démo de données fictives :
+6. (Optionnel) Installer les fixtures pour avoir une démo de données fictives (conseillé):
 ```
     php bin/console doctrine:fixtures:load
 ```
-
+7. Aller dans la base de données, pour récupérer un token client:
+```
+    Table ApiToken sur une entrée avec IdClient différent de 'null'
+```
+8. Pour tester les requettes avec documentation, si vous êtes sur votre localhost :
+```
+    http://127.0.0.1:8001/api/doc
+```
+9. Cliquer sur "Authorize" à droite :
+```
+    Coller le token dans la case pour identifier l'APP_FRONTEND du Client
+```
+10. Une fois authentifié, vous pouvez vous inscrire dans la base du client :
+```
+    Vous serez enregistré en tant que client, donc avec des accès limité
+```
+11. Pour tester les requettes en tant que Admin Client ou Super Admin
+```
+    Modifier votre rôle dans la table 'User' en "ROLE_CLIENT" ou "ROLE_ADMIN"
+```
