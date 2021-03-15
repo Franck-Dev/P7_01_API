@@ -76,8 +76,11 @@ class ClientsController extends AbstractFOSRestController
      * 
      * @OA(name="Client")
      */
-    public function showAction(Clients $client)
+    public function showAction(?Clients $client)
     {
+        if(!$client) {
+            return $this->view('Client not found with this id', Response::HTTP_NOT_FOUND);
+        }
         return $client;
     }
 
