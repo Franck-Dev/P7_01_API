@@ -1,3 +1,5 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/0b29fa9279c64fe1af971ee5054cf89b)](https://www.codacy.com/gh/Franck-Dev/P7_01_API/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Franck-Dev/P7_01_API&amp;utm_campaign=Badge_Grade)
+
 # P7_01_API
 Projet 7: Creation d'une API REST sous symfony
 ## Environnement utilisé durant le développement
