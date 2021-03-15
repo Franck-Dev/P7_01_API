@@ -106,8 +106,11 @@ class SecurityController extends AbstractFOSRestController
      * 
      * @OA\Tag(name="Utilisateurs")
      */
-    public function showAction(Users $user)
+    public function showAction(?Users $user)
     {
+        if(!$user) {
+            return $this->view('User not found with this id', Response::HTTP_NOT_FOUND);            
+        }
         return $user;
     }
 }

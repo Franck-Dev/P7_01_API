@@ -37,21 +37,24 @@ class ProduitsController extends AbstractFOSRestController
      *     name="limit",
      *     requirements="\d+",
      *     default="15",
-     *     description="Début de pagination"
+     *     description="Fin de pagination"
      * )
      * @Rest\QueryParam(
      *     name="offset",
      *     requirements="\d+",
      *     default="1",
-     *     description="Fin de pagination"
+     *     description="Début de pagination"
      * )
-     * @Rest\View
+     * @Rest\View(StatusCode = 200)
      * 
      * @OA(name="Utilisateurs")
      */
     public function listProduits(ProduitsRepository $repo, $order, $limit, $offset)
     {        
         $produits=$repo->findBy([],['Name'=> $order],$limit,$offset);
+        if(!$produits) {
+            return $this->view('Not products with their criterias', Response::HTTP_NOT_FOUND);
+        }
         return $produits;
     }
     
@@ -65,8 +68,11 @@ class ProduitsController extends AbstractFOSRestController
      * 
      * @OA(name="Utilisateurs")
      */
-    public function showAction(Produits $produit)
+    public function showAction(?Produits $produit)
     {
+        if(!$produit) {
+            return $this->view('Product not found with this id', Response::HTTP_NOT_FOUND);
+        }
         return $produit;
     }
 
