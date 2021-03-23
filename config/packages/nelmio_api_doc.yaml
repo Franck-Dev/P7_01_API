@@ -21,9 +21,9 @@ nelmio_api_doc:
               description: Le status 202 veut dire que la requette a bien fonctionnée
             "400":
               description: Erreur de mot de passe
-            "402":
+            "401":
               description: Token d'authentification pas reconnu
-            "500":
+            "404":
               description: Identifiant inconnu dans la base
       /api/register:
         post:

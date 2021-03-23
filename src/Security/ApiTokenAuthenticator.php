@@ -73,7 +73,7 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator
     {
         return new JsonResponse([
             'message' => 'Authentication Requise'
-        ], 402);
+        ], 401);
 
     }
 
