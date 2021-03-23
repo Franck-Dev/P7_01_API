@@ -23,7 +23,7 @@ class ProduitsController extends AbstractFOSRestController
 {
     /**
      * @Rest\Get(
-     *     path = "/produits/list",
+     *     path = "/produits",
      *     name = "app_produits_list"
      * )
      * @Rest\QueryParam(

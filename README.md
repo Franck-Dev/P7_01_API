@@ -12,6 +12,7 @@ Projet 7: Creation d'une API REST sous symfony
     * Apache 2.4.33
     * PHP 7.2.7
     * MariaDB 4.8.2
+* REST Client APIsHub de Firefox Developer Edition
 
 ## Installation
 1. Clonez ou téléchargez le repository GitHub sur le serveur :
@@ -50,7 +51,7 @@ Projet 7: Creation d'une API REST sous symfony
 ```
 10. Une fois authentifié, vous pouvez vous inscrire dans la base du client :
 ```
-    Vous serez enregistré en tant que client, donc avec des accès limité
+    Vous serez enregistré en tant que user, donc avec des accès limités
 ```
 11. Pour tester les requettes en tant que Admin Client ou Super Admin
 ```

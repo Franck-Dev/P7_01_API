@@ -27,7 +27,7 @@ class ClientsController extends AbstractFOSRestController
 {
     /**
      * @Rest\Get(
-     *     path = "/admin/clients/list",
+     *     path = "/admin/clients",
      *     name = "app_clients_list"
      * )
      * @Rest\View(serializerGroups={"list"})
@@ -86,7 +86,7 @@ class ClientsController extends AbstractFOSRestController
 
      /**
      * @Rest\Get(
-     *     path = "/client/Users/List",
+     *     path = "/client/Users",
      *     name = "app_users_list"
      * )
      * @Rest\QueryParam(
