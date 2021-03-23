@@ -5,11 +5,9 @@ namespace App\Controller;
 use App\Entity\Users;
 use App\Entity\Clients;
 use App\Entity\ApiToken;
-use OpenApi\Annotations as OA;
 use App\Security\ApiTokenAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use App\Exception\ResourceValidationException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -18,6 +16,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use OpenApi\Annotations as OA;
 
 /**
  * @Route("/api",name="api_")
@@ -31,7 +30,7 @@ class SecurityController extends AbstractFOSRestController
      *    path = "/register",
      *    name = "app_user_create"
      * )
-     * @Rest\View(StatusCode = 201,serializerGroups={"Show"})
+     * @Rest\View(StatusCode = 201)
      * @ParamConverter("user", converter="fos_rest.request_body")
      * 
      * @OA\Tag(name="Utilisateurs")
@@ -59,7 +58,7 @@ class SecurityController extends AbstractFOSRestController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->view($user, Response::HTTP_CREATED, ['Location' => $this->generateUrl('api_app_user_login', ['', UrlGeneratorInterface::ABSOLUTE_URL])]);
+            return $this->view($user, Response::HTTP_CREATED, ['Location' => $this->generateUrl('app_security', ['', UrlGeneratorInterface::ABSOLUTE_URL])]);
     }
 
      /**
@@ -94,6 +93,7 @@ class SecurityController extends AbstractFOSRestController
         } else {
             return $this->view('Identifiant inconnu dans la base', Response::HTTP_NOT_FOUND);
         }
+        
     }
 
     /**
